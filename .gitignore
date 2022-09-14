@@ -58,6 +58,8 @@ fabric.properties
 go.sum
 !build/.gitkeep
 build/*
+!logs/.gitkeep
+logs/*
 
 # Test binary, built with `go test -c`
 *.test
