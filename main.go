@@ -4,12 +4,13 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/spf13/viper"
 	"log"
+	"os"
 )
 
 func main() {
 	// read configuration
-	viper.SetConfigType("yaml")
-	viper.SetConfigFile("env.yaml")
+	viper.SetConfigType("env")
+	viper.SetConfigFile(".env")
 	err := viper.ReadInConfig()
 	if err != nil {
 		log.Fatal(err)
@@ -21,6 +22,6 @@ func main() {
 		return c.SendString("Hello, World!")
 	})
 
-	app_port := viper.GetString("APP_PORT")
+	app_port := os.Getenv("APP_PORT")
 	log.Fatal(app.Listen(":" + app_port))
 }

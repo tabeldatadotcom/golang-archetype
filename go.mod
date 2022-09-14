@@ -1,4 +1,4 @@
-module tabeldatadotcom/archetype/api
+module tabeldatadotcom/archetype/backend-api
 
 go 1.19
 
