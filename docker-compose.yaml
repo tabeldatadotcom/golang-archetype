@@ -1,4 +1,6 @@
 version: '3.9'
+volumes:
+  pg_data: { }
 services:
   webapp:
     image: tabeldatadotcom/archetype:v1
@@ -11,3 +13,18 @@ services:
         ENVFILE: .env
     environment:
       APP_PORT: 8080
+    volumes:
+      - source: .env
+        target: /var/www/apps/.env
+        type: bind
+  postgres:
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_PASSWORD=$DATABASE_PASSWORD
+      - POSTGRES_USER=$DATABASE_USERNAME
+      - POSTGRES_DB=$DATABASE_NAME
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
