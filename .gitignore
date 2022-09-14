@@ -60,6 +60,7 @@ go.sum
 build/*
 !logs/.gitkeep
 logs/*
+vendor/
 
 # Test binary, built with `go test -c`
 *.test

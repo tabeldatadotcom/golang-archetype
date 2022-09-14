@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/viper"
 	"log"
 	"os"
+	"tabeldatadotcom/archetype/backend-api/router"
 )
 
 func main() {
@@ -34,10 +35,17 @@ func main() {
 		Output: file,
 	}))
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World!")
+	apiV1 := app.Group("/api/v1", func(ctx *fiber.Ctx) error {
+		ctx.Set("Version", "v1")
+		return ctx.Next()
 	})
 
-	app_port := os.Getenv("APP_PORT")
-	log.Fatal(app.Listen(":" + app_port))
+	apiV1.Get("/hello", router.HelloWorld)
+
+	// employees mapping
+	apiV1Employees := apiV1.Group("/employees")
+	apiV1Employees.Get("/findBy/:id", router.FindEmployeeById)
+
+	appPort := os.Getenv("APP_PORT")
+	log.Fatal(app.Listen(":" + appPort))
 }
