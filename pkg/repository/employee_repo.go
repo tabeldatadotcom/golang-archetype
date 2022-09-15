@@ -14,10 +14,6 @@ type EmployeesRepository interface {
 	DeleteEmployeeById(employeeId string) error
 }
 
-type repository struct {
-	Database *sql.DB
-}
-
 func NewRepo(db *sql.DB) EmployeesRepository {
 	return &repository{
 		Database: db,
