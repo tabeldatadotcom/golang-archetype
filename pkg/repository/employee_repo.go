@@ -21,28 +21,35 @@ func NewRepo(db *sql.DB) EmployeesRepository {
 }
 
 func (r repository) InsertEmployee(value *model.Employee) (*model.Employee, error) {
-	const query = "INSERT INTO employees(first_name, last_name, salary, commission_pct, created_by) values ($1, $2, $3, $3, $4) returning id"
+	const query = "INSERT INTO employees(first_name, last_name, salary, commission_pct, created_by) values ($1, $2, $3, $3, $4) returning id, created_date"
 	res, err := r.Database.Query(query, value.FirstName, value.LastName, value.Salary, value.CommissionPct, time.Now())
 	if err != nil {
 		return nil, err
 	}
 	defer res.Close()
 
+	employee := model.Employee{
+		CommissionPct: value.CommissionPct,
+		FirstName:     value.FirstName,
+		LastName:      value.LastName,
+		Salary:        value.Salary,
+		HireDate:      value.HireDate,
+	}
 	log.Println(res)
 	if res.Next() {
-		if err := res.Scan(&value.ID); err != nil {
+		if err := res.Scan(&employee.ID); err != nil {
 			return nil, err
 		}
 	}
 
-	return value, nil
+	return &employee, nil
 }
 
 func (r repository) FindEmployeeById(id string) (*model.Employee, error) {
 	const query = "select id,\n       first_name,\n       last_name,\n       salary,\n       commission_pct,\n       hire_date\nfrom employees\nwhere id = $1"
 	aRow := r.Database.QueryRow(query, id)
 
-	value  := model.Employee{}
+	value := model.Employee{}
 	err := aRow.Scan(&value.ID, &value.FirstName, &value.LastName, &value.Salary, &value.CommissionPct, &value.HireDate)
 	if err != nil {
 		return nil, err
