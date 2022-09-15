@@ -8,21 +8,29 @@ import (
 	"log"
 )
 
-func SetupDatabase() error {
-	var err error
-	var dbConnect = fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", viper.GetString("DATABASE_HOST"), viper.GetInt("DATABASE_PORT"), viper.GetString("DATABASE_USERNAME"), viper.GetString("DATABASE_PASSWORD"), viper.GetString("DATABASE_NAME"))
+func SetupDatabase() (*sql.DB, error) {
+	var (
+		host     = viper.GetString("DATABASE_HOST")
+		port     = viper.GetInt("DATABASE_PORT")
+		user     = viper.GetString("DATABASE_USERNAME")
+		password = viper.GetString("DATABASE_PASSWORD")
+		db       = viper.GetString("DATABASE_NAME")
+	)
 
-	log.Printf("Connecting to dbName: %s@%s", viper.GetString("DATABASE_NAME"), viper.GetString("DATABASE_HOST"))
+	var err error
+	var dbConnect = fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, db)
+
+	log.Printf("Connecting to dbName: %s@%s", db, host)
 	open, err := sql.Open("postgres", dbConnect)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	if err = open.Ping(); err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return open, nil
 }

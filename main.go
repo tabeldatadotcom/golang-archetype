@@ -9,6 +9,7 @@ import (
 	"tabeldatadotcom/archetype/backend-api/api/routers"
 	"tabeldatadotcom/archetype/backend-api/config"
 	"tabeldatadotcom/archetype/backend-api/pkg/delivery"
+	"tabeldatadotcom/archetype/backend-api/pkg/repository"
 )
 
 func main() {
@@ -16,8 +17,9 @@ func main() {
 	config.SetupEnvironment()
 
 	// connect with database
-	if err := delivery.SetupDatabase(); err != nil {
-		log.Fatal(err)
+	db, dbErr := delivery.SetupDatabase()
+	if dbErr != nil {
+		log.Fatal(dbErr)
 	}
 
 	app := fiber.New()
@@ -38,7 +40,8 @@ func main() {
 	config.SetupLogger(app, file)
 
 	// setting routing url
-	routers.SetupRouters(app)
+	employeService := repository.NewRepo(db)
+	routers.SetupRouters(app, employeService)
 
 	appPort := os.Getenv("APP_PORT")
 	log.Fatal(app.Listen(":" + appPort))

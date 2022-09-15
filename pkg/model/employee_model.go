@@ -7,5 +7,6 @@ type Employee struct {
 	FirstName string
 	LastName  string
 	Salary    int64
+	CommissionPct float32
 	HireDate  time.Time
 }
