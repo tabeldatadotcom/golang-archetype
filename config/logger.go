@@ -10,7 +10,8 @@ import (
 func SetupLogger(app *fiber.App, file *os.File) {
 	app.Use(requestid.New())
 	app.Use(logger.New(logger.Config{
-		Format: "${time} ==> [${ip}:${port}] ${pid} ${locals:requestid} ${status} - ${method} ${path}\n",
+		Format: "${time} ==> [${ip}:${port}] ${pid} ${locals:requestid} ${status} - ${method} ${path}\n" +
+			"${error}\n",
 		Output: file,
 		TimeFormat: "Jan-02-2006 15:04:05",
 	}))

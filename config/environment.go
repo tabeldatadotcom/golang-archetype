@@ -7,7 +7,7 @@ import (
 
 func SetupEnvironment() {
 	viper.SetConfigType("env")
-	viper.SetConfigFile(".env.example")
+	viper.SetConfigFile(".env")
 	err := viper.ReadInConfig()
 	if err != nil {
 		log.Fatal(err)
