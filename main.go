@@ -22,10 +22,18 @@ func main() {
 		log.Fatal(dbErr)
 	}
 
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		ErrorHandler: func(ctx *fiber.Ctx, err error) error {
+			ctx.Status(fiber.StatusInternalServerError)
+			return ctx.SendString(err.Error())
+		},
+	})
 
 	// using cors
 	app.Use(cors.New())
+
+	// Middleware
+	//app.Use(recover.New()) // FIXME not working
 
 	// enable logging file
 	logLocation := viper.GetString("LOG_FILE_LOCATION")

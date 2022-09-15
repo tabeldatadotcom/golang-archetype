@@ -1,3 +1,4 @@
+### Create new employees
 POST {{hostname}}:{{port}}{{context-path}}/api/v1/employees/save
 Content-Type: application/json
 
@@ -9,9 +10,7 @@ Content-Type: application/json
   "commissionPct": 0.4
 }
 
-### Create new employees
-
-GET {{hostname}}:{{port}}{{context-path}}/api/v1/employees/findBy/fc9c35cd-4268-4a3f-893d-3135dc90d09d
-Content-Type: application/json
-
 ### Get employee by id
+
+GET {{hostname}}:{{port}}{{context-path}}/api/v1/employees/findBy/e7bbf048-e66e-4125-b1ff-97b563da195b
+Content-Type: application/json
