@@ -1,9 +1,9 @@
-package router
+package routers
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"tabeldatadotcom/archetype/backend-api/handler"
-	"tabeldatadotcom/archetype/backend-api/handler/employees"
+	"tabeldatadotcom/archetype/backend-api/api/handlers"
+	"tabeldatadotcom/archetype/backend-api/api/handlers/employees"
 )
 
 func SetupRouters(app *fiber.App) {
@@ -13,9 +13,9 @@ func SetupRouters(app *fiber.App) {
 	})
 
 	// example mapping
-	apiV1.Get("/hello", handler.HelloWorld)
+	apiV1.Get("/hello", handlers.HelloWorld)
 
 	// employees mapping
 	apiV1Employees := apiV1.Group("/employees")
-	apiV1Employees.Get("/findBy/:id", employees.FindEmployeeById)
+	apiV1Employees.Get("/findBy/:id", employees.FindEmployeeById())
 }

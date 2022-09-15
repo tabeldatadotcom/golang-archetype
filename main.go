@@ -5,15 +5,21 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"log"
 	"os"
+	"tabeldatadotcom/archetype/backend-api/api/routers"
 	"tabeldatadotcom/archetype/backend-api/config"
-	"tabeldatadotcom/archetype/backend-api/router"
+	"tabeldatadotcom/archetype/backend-api/pkg/delivery"
 )
 
 func main() {
-	app := fiber.New()
-
 	// read configuration
 	config.SetupEnvironment()
+
+	// connect with database
+	if err := delivery.SetupDatabase(); err != nil {
+		log.Fatal(err)
+	}
+
+	app := fiber.New()
 
 	// using cors
 	app.Use(cors.New())
@@ -29,7 +35,7 @@ func main() {
 	config.SetupLogger(app, file)
 
 	// setting routing url
-	router.SetupRouters(app)
+	routers.SetupRouters(app)
 
 	appPort := os.Getenv("APP_PORT")
 	log.Fatal(app.Listen(":" + appPort))
