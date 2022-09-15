@@ -13,7 +13,7 @@ func FindEmployeeById(repo repository.EmployeesRepository) fiber.Handler {
 
 		employee, err := repo.FindEmployeeById(id)
 		if err != nil {
-			return err
+			return c.Status(fiber.StatusNoContent).Send(nil)
 		}
 		return c.Status(fiber.StatusOK).JSON(employee)
 	}
@@ -37,6 +37,6 @@ func CreateNewEmployee(repo repository.EmployeesRepository) fiber.Handler {
 		if err != nil {
 			return err
 		}
-		return c.Status(fiber.StatusOK).JSON(employee)
+		return c.Status(fiber.StatusCreated).JSON(employee)
 	}
 }

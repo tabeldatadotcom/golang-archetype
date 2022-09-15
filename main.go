@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/spf13/viper"
 	"log"
 	"os"
@@ -33,7 +34,14 @@ func main() {
 	app.Use(cors.New())
 
 	// Middleware
-	//app.Use(recover.New()) // FIXME not working
+	app.Use(recover.New(
+		recover.Config{
+			EnableStackTrace: true,
+			StackTraceHandler: func(c *fiber.Ctx, e interface{}) {
+				c.Status(fiber.StatusInternalServerError)
+			},
+		},
+	))
 
 	// enable logging file
 	logLocation := viper.GetString("LOG_FILE_LOCATION")
