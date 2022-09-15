@@ -2,25 +2,21 @@ package main
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/logger"
-	"github.com/gofiber/fiber/v2/middleware/requestid"
-	"github.com/spf13/viper"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"log"
 	"os"
+	"tabeldatadotcom/archetype/backend-api/config"
 	"tabeldatadotcom/archetype/backend-api/router"
 )
 
 func main() {
-	// read configuration
-	viper.SetConfigType("env")
-	viper.SetConfigFile(".env")
-	err := viper.ReadInConfig()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// initialize web application
 	app := fiber.New()
+
+	// read configuration
+	config.SetupEnvironment()
+
+	// using cors
+	app.Use(cors.New())
 
 	// enable logging file
 	file, err := os.OpenFile("./logs/application.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
@@ -29,22 +25,11 @@ func main() {
 	}
 	defer file.Close()
 
-	app.Use(requestid.New())
-	app.Use(logger.New(logger.Config{
-		Format: "${pid} ${locals:requestid} ${status} - ${method} ${path}\n",
-		Output: file,
-	}))
+	// setting logger management
+	config.SetupLogger(app, file)
 
-	apiV1 := app.Group("/api/v1", func(ctx *fiber.Ctx) error {
-		ctx.Set("Version", "v1")
-		return ctx.Next()
-	})
-
-	apiV1.Get("/hello", router.HelloWorld)
-
-	// employees mapping
-	apiV1Employees := apiV1.Group("/employees")
-	apiV1Employees.Get("/findBy/:id", router.FindEmployeeById)
+	// setting routing url
+	router.SetupRouters(app)
 
 	appPort := os.Getenv("APP_PORT")
 	log.Fatal(app.Listen(":" + appPort))

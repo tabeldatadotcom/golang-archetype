@@ -1,4 +1,4 @@
-package router
+package employees
 
 import (
 	"github.com/gofiber/fiber/v2"

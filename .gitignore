@@ -61,6 +61,7 @@ build/*
 !logs/.gitkeep
 logs/*
 vendor/
+.env
 
 # Test binary, built with `go test -c`
 *.test
