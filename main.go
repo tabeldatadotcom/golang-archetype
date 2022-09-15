@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/spf13/viper"
 	"log"
 	"os"
 	"tabeldatadotcom/archetype/backend-api/api/routers"
@@ -25,7 +26,9 @@ func main() {
 	app.Use(cors.New())
 
 	// enable logging file
-	file, err := os.OpenFile("./logs/application.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	logLocation := viper.GetString("LOG_FILE_LOCATION")
+	log.Printf("writing logfile in: %s", logLocation)
+	file, err := os.OpenFile(logLocation, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
 	}
