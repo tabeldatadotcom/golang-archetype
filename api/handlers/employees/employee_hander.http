@@ -1,0 +1,17 @@
+POST {{hostname}}:{{port}}{{context-path}}/api/v1/employees/save
+Content-Type: application/json
+
+{
+  "firstName": "Dimas",
+  "lastName": "Maryanto",
+  "salary": 100000,
+  "hireDate": "2015-08-25T00:00:00Z",
+  "commissionPct": 0.4
+}
+
+### Create new employees
+
+GET {{hostname}}:{{port}}{{context-path}}/api/v1/employees/findBy/fc9c35cd-4268-4a3f-893d-3135dc90d09d
+Content-Type: application/json
+
+### Get employee by id

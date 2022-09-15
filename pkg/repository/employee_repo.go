@@ -21,7 +21,7 @@ func NewRepo(db *sql.DB) EmployeesRepository {
 }
 
 func (r repository) InsertEmployee(value *model.Employee) (*model.Employee, error) {
-	const query = "INSERT INTO employees(first_name, last_name, salary, commission_pct, created_by) values ($1, $2, $3, $3, $4) returning id, created_date"
+	const query = "INSERT INTO employees(first_name, last_name, salary, commission_pct, created_by) values ($1, $2, $3, $4, $5) returning id"
 	res, err := r.Database.Query(query, value.FirstName, value.LastName, value.Salary, value.CommissionPct, time.Now())
 	if err != nil {
 		return nil, err

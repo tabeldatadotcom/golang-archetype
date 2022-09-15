@@ -19,4 +19,5 @@ func SetupRouters(app *fiber.App, repo repository.EmployeesRepository) {
 	// employees mapping
 	apiV1Employees := apiV1.Group("/employees")
 	apiV1Employees.Get("/findBy/:id", employees.FindEmployeeById(repo))
+	apiV1Employees.Post("/save", employees.CreateNewEmployee(repo))
 }
