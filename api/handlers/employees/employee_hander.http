@@ -10,7 +10,20 @@ Content-Type: application/json
   "commissionPct": 0.4
 }
 
+### Update an employee
+PUT {{hostname}}:{{port}}{{context-path}}/api/v1/employees/update
+Content-Type: application/json
+
+{
+  "id": "1a4f1c0f-c3c9-420e-9384-75c01f1ce953",
+  "firstName": "Dimas",
+  "lastName": "Maryanto",
+  "salary": 200000,
+  "hireDate": "2015-08-25T00:00:00Z",
+  "commissionPct": 0.4
+}
+
 ### Get employee by id
 
-GET {{hostname}}:{{port}}{{context-path}}/api/v1/employees/findBy/7a16f84d-b060-48f0-a496-5e0358a233b7
+GET {{hostname}}:{{port}}{{context-path}}/api/v1/employees/findBy/1a4f1c0f-c3c9-420e-9384-75c01f1ce953
 Content-Type: application/json

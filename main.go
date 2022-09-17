@@ -18,6 +18,7 @@ func main() {
 
 	// connect with database
 	db, dbErr := config.SetupDatabase()
+	defer db.Close()
 	if dbErr != nil {
 		log.Fatal(dbErr)
 	}

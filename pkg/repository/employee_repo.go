@@ -46,8 +46,12 @@ func (r repository) FindEmployeeById(id string) (*model.Employee, error) {
        commission_pct,
        hire_date
 from employees
-where id = $1`
-	aRow := r.Connect.QueryRow(query, id)
+where id = :employeeId`
+	data := map[string]interface{}{"employeeId": id}
+	prepQuery, _ := r.Connect.PrepareNamed(query)
+	defer prepQuery.Close()
+
+	aRow := prepQuery.QueryRow(data)
 
 	value := model.Employee{}
 	err := aRow.Scan(&value.ID, &value.FirstName, &value.LastName, &value.Salary, &value.CommissionPct, &value.HireDate)
@@ -58,8 +62,37 @@ where id = $1`
 	return &value, nil
 }
 
-func (r repository) UpdateEmployee(employee *model.Employee) (*model.Employee, error) {
-	return nil, nil
+func (r repository) UpdateEmployee(value *model.Employee) (*model.Employee, error) {
+	query := `UPDATE employees
+SET first_name     = $1,
+    last_name      = $2,
+    salary         = $3,
+    commission_pct = $4,
+    hire_date      = $5,
+    last_updated_date = now(),
+    last_updated_by = 'application'
+where id = $6`
+	trx, _ := r.Connect.Begin()
+	namedStmt, _ := trx.Prepare(query)
+	defer namedStmt.Close()
+
+	_, errExec := namedStmt.Exec(
+		value.FirstName,
+		value.LastName,
+		value.Salary,
+		value.CommissionPct,
+		value.HireDate,
+		value.ID,
+	)
+	if errExec != nil {
+		return nil, errExec
+	}
+
+	err := trx.Commit()
+	if err != nil {
+		return nil, err
+	}
+	return value, nil
 }
 
 func (r repository) DeleteEmployeeById(employeeId string) error {
