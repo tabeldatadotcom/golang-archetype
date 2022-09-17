@@ -28,22 +28,14 @@ returning id`
 	defer preparedQuery.Close()
 	returning := preparedQuery.QueryRow(value.FirstName, value.LastName, value.Salary, value.CommissionPct, time.Now())
 
-	employee := model.Employee{
-		CommissionPct: value.CommissionPct,
-		FirstName:     value.FirstName,
-		LastName:      value.LastName,
-		Salary:        value.Salary,
-		HireDate:      value.HireDate,
-	}
-
-	if err := returning.Scan(&employee.ID); err != nil {
+	if err := returning.Scan(&value.ID); err != nil {
 		return nil, err
 	}
 	errCommit := tx.Commit()
 	if errCommit != nil {
 		return nil, errCommit
 	}
-	return &employee, nil
+	return value, nil
 }
 
 func (r repository) FindEmployeeById(id string) (*model.Employee, error) {
