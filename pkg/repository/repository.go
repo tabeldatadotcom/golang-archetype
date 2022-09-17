@@ -1,7 +1,9 @@
 package repository
 
-import "database/sql"
+import (
+	"github.com/jmoiron/sqlx"
+)
 
 type repository struct {
-	Database *sql.DB
+	Connect *sqlx.DB
 }
