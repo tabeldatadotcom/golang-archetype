@@ -1,14 +1,15 @@
-package delivery
+package config
 
 import (
-	"database/sql"
 	"fmt"
+
+	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"github.com/spf13/viper"
 	"log"
 )
 
-func SetupDatabase() (*sql.DB, error) {
+func SetupDatabase() (*sqlx.DB, error) {
 	var (
 		host     = viper.GetString("DATABASE_HOST")
 		port     = viper.GetInt("DATABASE_PORT")
@@ -21,16 +22,13 @@ func SetupDatabase() (*sql.DB, error) {
 	var dbConnect = fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, db)
 
 	log.Printf("Connecting to dbName: %s@%s", db, host)
-	open, err := sql.Open("postgres", dbConnect)
-	if err != nil {
-		return nil, err
-	}
+	connect, err := sqlx.Open("postgres", dbConnect)
 	if err != nil {
 		return nil, err
 	}
 
-	if err = open.Ping(); err != nil {
+	if err = connect.Ping(); err != nil {
 		return nil, err
 	}
-	return open, nil
+	return connect, nil
 }

@@ -1,0 +1,20 @@
+version: '3.9'
+services:
+  webapp:
+    image: tabeldatadotcom/archetype:v1
+    ports:
+      - "8080:8080"
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        ENVFILE: .env.docker
+    environment:
+      APP_PORT: 8080
+    volumes:
+      - source: .env.docker
+        target: /var/www/apps/.env
+        type: bind
+    depends_on:
+      - postgres
+

@@ -12,5 +12,5 @@ Content-Type: application/json
 
 ### Get employee by id
 
-GET {{hostname}}:{{port}}{{context-path}}/api/v1/employees/findBy/1
+GET {{hostname}}:{{port}}{{context-path}}/api/v1/employees/findBy/7a16f84d-b060-48f0-a496-5e0358a233b7
 Content-Type: application/json

@@ -9,7 +9,6 @@ import (
 	"os"
 	"tabeldatadotcom/archetype/backend-api/api/routers"
 	"tabeldatadotcom/archetype/backend-api/config"
-	"tabeldatadotcom/archetype/backend-api/pkg/delivery"
 	"tabeldatadotcom/archetype/backend-api/pkg/repository"
 )
 
@@ -18,7 +17,7 @@ func main() {
 	config.SetupEnvironment()
 
 	// connect with database
-	db, dbErr := delivery.SetupDatabase()
+	db, dbErr := config.SetupDatabase()
 	if dbErr != nil {
 		log.Fatal(dbErr)
 	}
