@@ -1,26 +1,8 @@
 version: '3.9'
 volumes:
   pg_data: { }
+
 services:
-  webapp:
-    image: tabeldatadotcom/archetype:v1
-    profiles:
-      - dev
-    ports:
-      - "8080:8080"
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        ENVFILE: .env.docker
-    environment:
-      APP_PORT: 8080
-    volumes:
-      - source: .env.docker
-        target: /var/www/apps/.env
-        type: bind
-    depends_on:
-      - postgres
   postgres:
     image: postgres:14-alpine
     environment:
@@ -42,5 +24,5 @@ services:
       - .env
     volumes:
       - ./db/migration:/migration
-    entrypoint: [ "migrate", "-path=/migration", "-database=postgres://example:example@postgres:5432/example?sslmode=disable&search_path=public" ]
+    entrypoint: [ "migrate", "-path=/migration", "-database=postgres://$DATABASE_USERNAME:$DATABASE_PASSWORD@postgres:5432/$DATABASE_NAME?sslmode=disable&search_path=public" ]
     command: [ "up" ]
