@@ -55,7 +55,6 @@ fabric.properties
 *.dll
 *.so
 *.dylib
-go.sum
 !build/.gitkeep
 build/*
 !logs/.gitkeep
