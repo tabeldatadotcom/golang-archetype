@@ -50,7 +50,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
 	}
-	defer file.Close()
 
 	// setting logger management
 	config.SetupLogger(app, file)
